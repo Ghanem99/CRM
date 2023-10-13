@@ -1,17 +1,23 @@
 <?php 
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use App\Models\User;
 
 class TestController extends Controller 
 {
 
-    public function index() 
+    public function index(Request $request) 
     {
-        echo "Hello Again!";
+        // return $request()->all();
+        // return $request->get('name', null)
+
+        // $id = $request->get('id');
+        // return User::find($id);
     }
 
-    public function home()
-    {
-        return view('home');
-    }
+    // public function index()
+    // {
+    //     return request()->all();
+    // }
 }
