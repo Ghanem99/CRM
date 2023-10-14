@@ -16,8 +16,27 @@ class TestController extends Controller
         // return User::find($id);
     }
 
-    // public function index()
-    // {
-    //     return request()->all();
-    // }
+    public function store(Request $request) 
+    {
+        $user = new User();
+        $user->username = $request->get('username');
+        $user->password = $request->get('password');
+        $user->save();
+    }
+
+    public function update(Request $request) 
+    {
+        $id = $request->get('id');
+        $user = User::find($id);
+        $user->username = $request->get('username');
+        $user->password = $request->get('password');
+        $user->save();
+    }
+
+    public function destroy(Request $request) 
+    {
+        $id = $request->get('id');
+        $user = User::find($id);
+        $user->delete();
+    }
 }

@@ -15,4 +15,4 @@ use App\Http\Controllers\TestController;
 |
 */
 
-Route::get('/', [TestController::class, 'home']);
+// Route::get('/', [TestController::class, 'home']);
