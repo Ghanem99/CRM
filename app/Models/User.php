@@ -45,6 +45,10 @@ class User extends Authenticatable
 
     public function index()
     {
-        return User::all();
+        $user = new User();
+        $user->name = 'mahmoud';
+        $user->email = 'm@gmail.com';
+        $user->password = 'm@gmail.com';
+        $user->save();
     }
 }
