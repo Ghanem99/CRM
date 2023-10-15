@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\NoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,14 @@ Route::post('/customers', [CustomerController::class, 'store']);
 Route::get('/customers/{id}', [CustomerController::class, 'show']);
 Route::patch('/customers/{id}', [CustomerController::class, 'update']);
 Route::delete('/customers/{id}', [CustomerController::class, 'delete']);
+
+
+Route::group(['prefix' => 'customers'], function() {
+    Route::get('/{customer_id}/notes', [NoteController::class, 'index']);
+    Route::post('/{customer_id}/notes', [NoteController::class, 'store']);
+    Route::get('/{customer_id}/notes/{id}', [NoteController::class, 'show']);
+    Route::patch('/{customer_id}/notes/{id}', [NoteController::class, 'update']);
+    Route::delete('/{customer_id}/notes/{id}', [NoteController::class, 'delete']);
+});
+
 
