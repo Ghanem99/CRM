@@ -36,4 +36,10 @@ Route::group(['prefix' => 'customers'], function() {
     Route::delete('/{customer_id}/notes/{id}', [NoteController::class, 'delete']);
 });
 
+Route::get('/test', function() {
+    return response()->json([
+        'message' => 'Hello World!'
+    ]);
+});
+
 

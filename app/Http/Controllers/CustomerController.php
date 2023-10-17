@@ -5,6 +5,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 use App\Models\Customer;
+use App\Http\Requests\CreateCustomer;
 
 class CustomerController extends Controller 
 {
@@ -26,7 +27,7 @@ class CustomerController extends Controller
         return $customer;
     }
 
-    public function store(Request $request)
+    public function store(CreateCustomer $request)
     {
         $customer = new Customer;
         $customer->name = $request->get('name');
@@ -37,7 +38,7 @@ class CustomerController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function update(Request $request, $id)
+    public function update(CreateCustomer $request, $id)
     {
         $customer = Customer::find($id);
 
