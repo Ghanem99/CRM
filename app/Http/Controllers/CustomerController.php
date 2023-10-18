@@ -30,7 +30,8 @@ class CustomerController extends Controller
 
     public function store(CreateCustomer $request)
     {
-        $customer = $this->customerService->store($request);
+        $customer = $this->customerService->store($request->get('name'));
+
     }
 
     public function update(CreateCustomer $request, $id)

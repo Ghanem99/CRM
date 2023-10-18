@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,10 +37,13 @@ Route::group(['prefix' => 'customers'], function() {
     Route::delete('/{customer_id}/notes/{id}', [NoteController::class, 'delete']);
 });
 
-Route::get('/test', function() {
-    return response()->json([
-        'message' => 'Hello World!'
-    ]);
+Route::group(['prefix' => 'projects'], function() {
+    // Route::get('/{customer_id}/projects', [ProjectController::class, 'index']);
+    Route::post('/{customer_id}/projects', [ProjectController::class, 'createProject']);
+    // Route::get('/{customer_id}/projects/{id}', [ProjectController::class, 'show']);
+    // Route::patch('/{customer_id}/projects/{id}', [ProjectController::class, 'update']);
+    // Route::delete('/{customer_id}/projects/{id}', [ProjectController::class, 'delete']);
 });
+
 
 

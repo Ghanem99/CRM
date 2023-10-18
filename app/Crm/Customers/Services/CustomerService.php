@@ -3,6 +3,7 @@
 namespace Crm\Customers\Services;
 
 use Crm\Customers\Models\Customer;
+use Crm\Customers\Requests\CreateCustomer;
 
 class CustomerService 
 {
@@ -25,11 +26,13 @@ class CustomerService
         return $customer;
     }
 
-    public function store(CreateCustomer $request)
+    public function store(string $name)
     {
         $customer = new Customer;
-        $customer->name = $request->get('name');
+        $customer->name = $name;
         $customer->save();
+
+        event(new CustomerCreation($customer));
 
         return response()->json([
             'message' => 'Customer created'
