@@ -7,7 +7,11 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+
 use Crm\Customer\Events\CustomerCreation;
+use Crm\Customer\Listeners\NotifySalesOnCustomerCreation;
+use Crm\Project\Events\ProjectCreation;
+use Crm\Project\Listeners\SendProjectCreationEmail;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         CustomerCreation::class => [
             NotifySalesOnCustomerCreation::class
         ], 
+        ProjectCreation::class => [
+            SendProjectCreationEmail::class
+        ]
 
     ];
 
