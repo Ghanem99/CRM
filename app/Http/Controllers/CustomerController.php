@@ -4,65 +4,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
+use Crm\Customers\Services\CustomerService;
 use App\Models\Customer;
 use App\Http\Requests\CreateCustomer;
 
+
 class CustomerController extends Controller 
 {
-    public function index() 
+    private CustomerService $customerService;
+
+    public function __construct(CustomerService $customerService) 
     {
-        return Customer::all();
+        $this->customerService = $customerService;
+    }
+
+    public function index(Request $request) 
+    {
+        $customers = $this->customerService->index($request);
     }
 
     public function show($id) 
     {
-        $customer = Customer::find($id);
-
-        if(!$customer) {    
-            return response()->json([
-                'message' => 'Customer not found'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        return $customer;
+        $customer = $this->customerService->show($id);
     }
 
     public function store(CreateCustomer $request)
     {
-        $customer = new Customer;
-        $customer->name = $request->get('name');
-        $customer->save();
-
-        return response()->json([
-            'message' => 'Customer created'
-        ], Response::HTTP_CREATED);
+        $customer = $this->customerService->store($request);
     }
 
     public function update(CreateCustomer $request, $id)
     {
-        $customer = Customer::find($id);
-
-        if(!$customer) {
-            return response()->json([
-                'message' => 'Customer not found'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $customer->name = $request->get('name');
-        $customer->save();
-
-        return response()->json([
-            'message' => 'Customer updated'
-        ], Response::HTTP_OK);
+        $customer = $this->customerService->update($request, $id);
     }
 
     public function delete($id)
     {
-        $customer = Customer::find($id);
-        $customer->delete();
-
-        return response()->json([
-            'message' => 'Customer deleted'
-        ], Response::HTTP_OK);
+        $customer = $this->customerService->delete((int) $id);
     }
+
 }
