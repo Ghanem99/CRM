@@ -1,12 +1,12 @@
 <?php
 
-namespace Crm\Customers\Listeners;
+namespace Crm\Customer\Listeners;
 
-use Crm\Customer\Events\CustomerCreation;
+use Crm\Customer\Events\CustomerCreationEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifySalesOnCustomerCreation
+class NotifySalesOnCustomerCreationListener
 {
     /**
      * Create the event listener.
@@ -19,10 +19,8 @@ class NotifySalesOnCustomerCreation
     /**
      * Handle the event.
      */
-    public function handle(CustomerCreation $event): void
+    public function handle(CustomerCreationEvent $event): void
     {
         $customer = $event->getCustomer();
-
-        // dd($customer);
     }
 }

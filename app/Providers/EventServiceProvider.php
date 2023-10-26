@@ -6,12 +6,14 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Crm\Customer\Events\CustomerCreationEvent;
+use Crm\Project\Events\ProjectCreationEvent;
+
+use Crm\Customer\Listeners\NotifySalesOnCustomerCreationListener;
+use Crm\Customer\Listeners\SendWelcomeEmailListener;
+use Crm\Customer\Listeners\SendProjectCreationEmail;
 
 
-use Crm\Customer\Events\CustomerCreation;
-use Crm\Customer\Listeners\NotifySalesOnCustomerCreation;
-use Crm\Project\Events\ProjectCreation;
-use Crm\Project\Listeners\SendProjectCreationEmail;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -24,13 +26,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        CustomerCreation::class => [
-            NotifySalesOnCustomerCreation::class
-        ], 
-        ProjectCreation::class => [
-            SendProjectCreationEmail::class
-        ]
-
+        CustomerCreationEvent::class => [
+            NotifySalesOnCustomerCreationListener::class,
+            SendWelcomeEmailListener::class,
+        ],
+        ProjectCreationEvent::class => [
+            SendProjectCreationEmail::class,
+        ],
     ];
 
     /**

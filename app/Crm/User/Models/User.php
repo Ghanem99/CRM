@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Crm\User\Models;
+namespace Crm\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +11,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    // const TOKEN_NAME = 'crm_token';
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -42,13 +44,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public function index()
-    {
-        $user = new User();
-        $user->name = 'mahmoud';
-        $user->email = 'm@gmail.com';
-        $user->password = 'm@gmail.com';
-        $user->save();
-    }
 }

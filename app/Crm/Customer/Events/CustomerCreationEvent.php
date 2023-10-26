@@ -1,6 +1,6 @@
 <?php
 
-namespace Crm\Project\Events;
+namespace Crm\Customer\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -9,29 +9,30 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Crm\Project\Models\Project;
 
-class ProjectCreation
+use Crm\Customer\Models\Customer;
+
+class CustomerCreationEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    private $project;
 
+    private Customer $customer;
     /**
      * Create a new event instance.
      */
-    public function __construct(Project $project)
+    public function __construct(Customer $customer)
     {
-        $this->setProject($Project);
+        $this->setCustomer($customer);  
     }
 
-    public function setProject($project)
+    public function getCustomer(): Customer
     {
-        $this->project = $project;
+        return $this->customer;
     }
 
-    public function getProject() : Project
+    public function setCustomer(Customer $customer): void
     {
-        return $this->project;
+        $this->customer = $customer;
     }
 
     /**

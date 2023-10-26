@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Crm\Customer\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Crm\Base\Requests\ApiRequest;
 
-class CreateCustomer extends ApiRequest
+class CreateCustomerRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +23,7 @@ class CreateCustomer extends ApiRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:3', 
         ];
     }
 }

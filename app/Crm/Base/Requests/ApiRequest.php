@@ -1,9 +1,14 @@
 <?php
 
-namespace Crm\Base;
+namespace Crm\Base\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 abstract class ApiRequest extends FormRequest
 {
@@ -21,20 +26,22 @@ abstract class ApiRequest extends FormRequest
 
     protected function failedValidation(Validator $validator): void
     {
-        $errors = new ValidationErrors($validator->errors());
-        if(!empty($errors->getErrors())) {
-            $transformedErrors = [];
+        $errors = (new ValidationException($validator))->errors(); // list of all errors
 
-            foreach($errors->getErrors() as $key => $value) {
-                $transformedErrors[] = [
-                    'field' => $key,
-                    'message' => $value[0]
-                ]; 
-            }
-
-            throw new \HttpResponseException(response()->json([
-                'errors' => $transformedErrors
-            ], HttpResponse::BadRequest));
+        if(! empty($errors)) {
+            $error = array_shift($errors)[0]; // first error
+        } else {
+            $error = 'Validation error';
         }
+        
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $error
+                ], 
+                JsonResponse::HTTP_BAD_REQUEST
+            )
+        );
     }
 }

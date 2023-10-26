@@ -1,75 +1,57 @@
 <?php 
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Response;
+
 use Illuminate\Http\Request;
-
+use Illuminate\Http\Response;
 use App\Models\Note;
+use App\Models\Customer;
 
-
-class NoteController extends Controller 
+class NoteController 
 {
-    public function index($customer_id) 
+    public function index(Customer $customer)
     {
-        return Note::where('customer_id', $customer_id)->get();;
-    }
-
-    public function show($customer_id, $id) 
-    {
-        $customer = Note::find($customer_id);
-
-        if(!$customer) {    
-            return response()->json([
-                'message' => 'Note not found'
-            ], Response::HTTP_NOT_FOUND);
+        if($customer->count() == 0) {
+            return response()->json(['message' => 'No customer with this id'], 404);
         }
 
-        return $note;
+        if(! $customer->notes->count()) {
+            return response()->json(['message' => 'No notes for this customer'], 404);
+        }
+
+
+        // return all notes for a customer with id $customer_id
+        return $customer->notes;
+    }   
+
+    public function show(Customer $customer, Note $note)
+    {
+        // return a single note with id $note_id for a customer with id $customer_id
+        return $customer->notes()->find($note->id);
     }
 
-    public function store(Request $request, $customer_id)
+    public function store(Request $request, Customer $customer)
     {
+        // create a new note for a customer with id $customer_id
         $note = new Note;
-        $note->note = $request->get('note');
-        $note->customer_id = $customer_id;
+        $note->note = $request->note;
+        $note->customer_id = $customer->id;
         $note->save();
 
-        return response()->json([
-            'message' => 'Note created'
-        ], Response::HTTP_CREATED);
+        return response()->json($note, 201);
     }
 
-    public function update(Request $request, $customer_id, $id)
+    public function update(Request $request, Customer $customer, Note $note)
     {
-        $note = Note::find($id);
-
-        if(!$note) {
-            return response()->json([
-                'message' => 'Note not found'
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        if($note->customer_id != $request->get('customer_id')) {
-            return response()->json([
-                'message' => 'Customer ID does not match'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $note->note = $request->get('note');
-        $note->save();
-
-        return response()->json([
-            'message' => 'Note updated'
-        ], Response::HTTP_OK);
+        // update a single note with id $note_id for a customer with id $customer_id
+        $note = $customer->notes()->update($request->all());
+        return response()->json($note, 200);
     }
 
-    public function delete($customer_id, $id)
+    public function delete(Customer $customer, Note $note)
     {
-        $note = Note::find($id);
+        // delete a single note with id $note_id for a customer with id $customer_id
         $note->delete();
-
-        return response()->json([
-            'message' => 'Customer deleted'
-        ], Response::HTTP_OK);
+        return response()->json(null, 204);
     }
 }

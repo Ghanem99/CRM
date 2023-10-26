@@ -1,15 +1,14 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Response;
+
 use Illuminate\Http\Request;
-
-use Crm\Customers\Services\CustomerService;
 use App\Models\Customer;
-use App\Http\Requests\CreateCustomer;
 
+use Crm\Customer\Requests\CreateCustomerRequest;
+use Crm\Customer\Services\CustomerService;
 
-class CustomerController extends Controller 
+class CustomerController extends Controller
 {
     private CustomerService $customerService;
 
@@ -17,31 +16,37 @@ class CustomerController extends Controller
     {
         $this->customerService = $customerService;
     }
-
-    public function index(Request $request) 
+    
+    public function index()
     {
-        $customers = $this->customerService->index($request);
+        return $this->customerService->index();
     }
 
-    public function show($id) 
+    public function show(Customer $customer)
     {
-        $customer = $this->customerService->show($id);
+        $customer = $this->customerService->show($customer->id);
+        if(! $customer) {
+            return response()->json(['message' => 'Customer not found'], HTTP_NOT_FOUND);
+        } else {
+            return response()->json($customer, HTTP_OK);
+        }
     }
 
-    public function store(CreateCustomer $request)
+    public function store(CreateCustomerRequest $request)
     {
-        $customer = $this->customerService->store($request->get('name'));
+        return $this->customerService->store($request);
 
+        
     }
 
-    public function update(CreateCustomer $request, $id)
+    public function update(Request $request, Customer $customer)
     {
-        $customer = $this->customerService->update($request, $id);
+        return $this->customerService->update($request, $customer);
     }
 
-    public function delete($id)
+    public function delete(Customer $customer)
     {
-        $customer = $this->customerService->delete((int) $id);
+        return $this->customerService->delete($customer);
     }
-
+    
 }

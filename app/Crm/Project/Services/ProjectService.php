@@ -3,22 +3,27 @@
 namespace Crm\Project\Services;
 
 use Crm\Project\Models\Project;
-use Crm\Project\Requests\CreateProject;
-use Crm\Project\Events\ProjectCreation;
-
+use Crm\Project\Events\ProjectCreationEvent;
+use Crm\Project\Requests\CreateProjectRequest;
+use Crm\Customer\Models\Customer;
 
 class ProjectService
 {
-    public function createProject(CreateProject $project, $customerId)
+    public function createProject(CreateProjectRequest $request, $customerId): Project
     {
         $project = new Project();
-        $project->name = $project->name;
-        $project->status = $project->status;
+        $project->name = $request->name;
+        $project->status = $request->status;
         $project->customer_id = $customerId;
-        $project->project_cost = $project->project_cost;
+        $project->cost = $request->cost;
         $project->save();
 
-        event(new ProjectCreation($project));
+        event(new ProjectCreationEvent($project));
         return $project;
+    }
+
+    public function getAllProjects(): array
+    {
+        return Project::all()->toArray();
     }
 }

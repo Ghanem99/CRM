@@ -1,11 +1,14 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Crm\Project\Services\ProjectService;
 
-use Crm\Project\Requests\CreateProject;
+use Crm\Project\Requests\CreateProjectRequest;
+use Crm\Customer\Models\Customer;
+
+use Crm\Customer\Services\CustomerService;
 
 class ProjectController extends Controller
 {
@@ -18,10 +21,17 @@ class ProjectController extends Controller
         $this->customerService = $customerService;
     }
 
-    public function createProject(CreateProject $project, $customerId)
+    public function index()
     {
-        $customer = $this->customerService->show($customerId);
-
-        return $this->projectService->createProject($project, $customerId);   
+        $projects = $this->projectService->getAllProjects();
     }
+
+    public function store(CreateProjectRequest $request, $customer_id)
+    {
+        $customer = $this->customerService->show($customer_id); 
+
+        return $this->projectService->createProject($request, $customer_id);
+    }
+
+
 }
